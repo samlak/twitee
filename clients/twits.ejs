@@ -1,0 +1,145 @@
+<%- include('./partials/header', {title: "Home"}); %>
+  <main class="container">
+    <div class="row my-2">
+      <div class="col-md-2"></div>
+      <div class="col-md-8 card border-primary mt-2">
+        <div class="text-center">
+          <h1 class="font-weight-bold text-primary"> TWITEE</h1>
+          <p class="text-uppercase font-weight-bold"><%= authenticatedUser.name %>! <a href="/logout">Log Out</a></p>
+        </div>
+        
+        <div class="row">
+          <% if (register.length > 0) { %>
+            <div class="mx-5 col-lg-11 alert alert-warning alert-dismissible fade show" role="alert">
+              <%= register %>
+      
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <% } %>
+          
+          <% if (authenticated.length > 0) { %>
+            <div class="mx-5 col-lg-11 alert alert-warning alert-dismissible fade show" role="alert">
+              <%= authenticated %>
+      
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <% } %>
+          
+          <% if (twitCreated.length > 0) { %>
+            <div class="mx-5 col-lg-11 alert alert-warning alert-dismissible fade show" role="alert">
+              <%= twitCreated %>
+      
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <% } %>
+          
+          <% if (twitDeleted.length > 0) { %>
+            <div class="mx-5 col-lg-11 alert alert-warning alert-dismissible fade show" role="alert">
+              <%= twitDeleted %>
+      
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <% } %>
+          
+          <% if (commentPosted.length > 0) { %>
+            <div class="mx-5 col-lg-11 alert alert-warning alert-dismissible fade show" role="alert">
+              <%= commentPosted %>
+      
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <% } %>
+          
+          <% if (likeTwit.length > 0) { %>
+            <div class="mx-5 col-lg-11 alert alert-warning alert-dismissible fade show" role="alert">
+              <%= likeTwit %>
+      
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <% } %>
+        </div>
+    
+        <form method="POST" action="/twit" class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <textarea class="form-control mb-3" name="twit" placeholder="Share your taught" required></textarea>
+            <button type="submit" class="btn btn-primary btn-block">Share your taught</button>
+          </div>
+          <div class="col-md-2"></div>
+        </form>
+        
+        <div class="container mt-4">
+          <h3 class="text-center">TWITS AVAILABLE</h3>
+          <% for(var i = 0; i < twits.length; i++) { %>
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+              <p class="text-center font-weight-bold">By <%= twits[i].user.name %> on <%= twits[i].date_posted %> <%= twits[i].time_posted %></p>
+              <p><%= twits[i].twit %></p>
+              <div class="form-inline">
+                <form method="POST" action="/like" class="mr-2">
+                  <input type="hidden" name="twitId" value="<%= twits[i]._id %>" >
+                  <button type="submit" class="btn btn-primary btn-sm">Like (<%= twits[i].likes.length %>)</button>
+                </form>
+                
+                <% if (String(authenticatedUser._id) === String(twits[i].user._id)) { %>
+                  <form method="POST" action="/deletetwit" class="ml-2">
+                    <input type="hidden" name="twitId" value="<%= twits[i]._id %>" >
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                  </form>
+                <% } %>
+              </div>
+
+              <div class="accordion mt-4" id="commentAccordion<%= i %>">
+                <div class="card">
+                  <div class="card-header" id="commentBlock<%= i %>">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#commentData<%= i %>" aria-expanded="false" aria-controls="commentData<%= i %>">
+                        Comments
+                      </button>
+                    </h5>
+                  </div>
+
+                  <div id="commentData<%= i %>" class="collapse" aria-labelledby="commentBlock<%= i %>" data-parent="#commentAccordion<%= i %>">
+                    <div class="card-body">
+                      <% for(var j = 0; j < twits[i].comments.length; j++) { %>
+                        <div class="card-body border-light shadow-sm p-3 mb-3 bg-white rounded">
+                          <span class="font-weight-bold">By <%- twits[i].comments[j].user.name %></span>
+                          <p class="mb-0"><%- twits[i].comments[j].comment %></p>
+                        </div>
+                      <% } %>
+                      <p class="text-center font-weight-bold">Add your own reply</p>
+                      <form method="POST" class="row" action="/comment">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                          <input type="hidden" name="twitId" value="<%= twits[i]._id %>" >
+                          <textarea class="form-control mb-3" name="comment" placeholder="Add your own reply" required></textarea>
+                          <button type="submit" class="btn btn-primary btn-block">Reply</button>
+                        </div>
+                        <div class="col-md-2"></div>
+                      </form>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+
+    
+  </main>
+<%- include('./partials/footer'); %>
+  

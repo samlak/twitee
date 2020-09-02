@@ -1,0 +1,36 @@
+{
+  "name": "twitee",
+  "version": "1.0.0",
+  "description": "Interview project for Jerimi Cloud",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watch",
+    "start": "node index.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "author": "Salami Haruna",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.5",
+    "ejs": "^3.1.2",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "mongodb": "^3.5.6",
+    "mongoose": "^5.9.10",
+    "validator": "^13.0.0"
+  },
+  "devDependencies": {
+    "expect": "^25.5.0",
+    "jest": "^25.5.4",
+    "superagent": "^5.2.2",
+    "supertest": "^4.0.2"
+  }
+}
